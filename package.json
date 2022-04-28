@@ -5,12 +5,14 @@
   "private": true,
   "license": "MIT",
   "scripts": {
+    "serve": "webpack-dev-server",
     "watch": "webpack --watch",
     "build": "webpack"
   },
   "devDependencies": {
     "html-webpack-plugin": "^5.5.0",
     "webpack": "^5.72.0",
-    "webpack-cli": "^4.9.2"
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.8.1"
   }
 }
