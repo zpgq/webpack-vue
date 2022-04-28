@@ -6,8 +6,8 @@ export class Dep {
     this.subs.push(sub)
   }
   depend() {
-    if(Dep.target) {
-      Dep.target.addDep(this)
+    if(window.target) {
+      window.target.addDep(this)
     }
   }
   notify() {
@@ -15,10 +15,4 @@ export class Dep {
       sub.updata()
     })
   }
-}
-
-const targetStack = [];
-export function pushTarget(target) {
-  targetStack.push(target);
-  Dep.target = target
 }

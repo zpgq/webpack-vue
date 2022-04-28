@@ -8,3 +8,14 @@ export function parsePath(path) {
     return obj
   }
 }
+
+export function def(obj, key, val) {
+  Object.defineProperty(obj, key, {
+    value: val
+  })
+}
+
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+export function hasOwn(obj, key) {
+  return hasOwnProperty.call(obj, key)
+}

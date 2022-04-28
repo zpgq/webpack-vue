@@ -1,4 +1,4 @@
-import { oberve } from "./oberver";
+import { observe } from "./oberver";
 import { Watcher } from "./oberver/watcher";
 
 function proxy(target, soureKey, key) {
@@ -19,7 +19,7 @@ export function initState(vm) {
   if (opts.data) {
     initData(vm)
   }
-  if (opts.computed) initComputed(vm, opts.computed)
+  // if (opts.computed) initComputed(vm, opts.computed)
 }
 
 function initData(vm) {
@@ -34,14 +34,14 @@ function initData(vm) {
     const key = keys[i]
     proxy(vm, '_data', key)
   }
-  oberve(data)
+  observe(data)
 }
 
 function getData(data, vm) {
   return data.call(vm, vm)
 }
 
-function initComputed(vm, computed) { }
+// function initComputed(vm, computed) { }
 
 export function stateMixin(Vue) {
   Vue.prototype.$watch = function (expOrFn, cb, options = {}) {
