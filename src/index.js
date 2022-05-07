@@ -13,4 +13,3 @@ window.Vue = Vue;
 export default Vue;
 
 
-

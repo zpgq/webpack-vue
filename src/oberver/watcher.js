@@ -5,7 +5,7 @@ export class Watcher {
   constructor(vm, expOrFn, cb, options = "") {
     this.vm = vm;
     this.cb = cb;
-    if(options) {
+    if (options) {
       this.deep = !!options.deep
     }
 
@@ -19,7 +19,7 @@ export class Watcher {
     window.target = this;
     const vm = this.vm
     let value = this.getter.call(vm, vm)
-    if(this.deep) {
+    if (this.deep) {
       traverse(value)
     }
     window.target = undefined;
@@ -39,9 +39,6 @@ export class Watcher {
   run() {
     const vm = this
     const value = this.get();
-
-    console.log(this.value)
-    console.log(value)
 
     if (value !== this.value) {
       const oldValue = this.value
