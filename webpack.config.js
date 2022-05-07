@@ -4,11 +4,10 @@ const path = require('path')
 
 module.exports = {
   mode: 'development',
-  entry: './src/index.js',
+  entry: ['./src/index.js'],
   devtool: 'eval-cheap-module-source-map',
   devServer: {
-    // contentBase: path.join(__dirname, 'dist'),
-    static: resolve(__dirname, "build"),
+    watchFiles: ['./index.html'],
     port: '9000',
   },
   plugins: [

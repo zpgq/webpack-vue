@@ -16,10 +16,11 @@ export function initState(vm) {
   vm._watchers = [];
   const opts = vm.$options;
 
-  if (opts.data) {
-    initData(vm)
-  }
-  // if (opts.computed) initComputed(vm, opts.computed)
+  if (opts.props) initProps(vm);
+  if (opts.methods) initMethods(vm)
+  if (opts.data) initData(vm)
+  if (opts.computed) initComputed(vm)
+  if (opts.watch) initWatch(vm)
 }
 
 function initData(vm) {
@@ -40,8 +41,6 @@ function initData(vm) {
 function getData(data, vm) {
   return data.call(vm, vm)
 }
-
-// function initComputed(vm, computed) { }
 
 export function stateMixin(Vue) {
   Vue.prototype.$watch = function (expOrFn, cb, options = {}) {

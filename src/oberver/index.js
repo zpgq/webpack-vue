@@ -51,7 +51,6 @@ function defineReactive(obj, key, val) {
 
   Object.defineProperty(obj, key, {
     get() {
-      console.log('getter', val)
       dep.depend();
       if (childOb) {
         childOb.dep.depend()

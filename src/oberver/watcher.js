@@ -1,6 +1,5 @@
 import { parsePath } from "../utils";
 import { traverse } from "./traverse"
-import { delTarget, pushTarget } from "./dep";
 
 export class Watcher {
   constructor(vm, expOrFn, cb, options = "") {
@@ -10,9 +9,11 @@ export class Watcher {
       this.deep = !!options.deep
     }
 
+    this.deps = [];
+    this.depIds = new Set();
+
     this.getter = typeof expOrFn === 'function' ? expOrFn: parsePath(expOrFn)
     this.value = this.get();
-    console.log('【value】', this.value)
   }
   get() {
     window.target = this;
@@ -25,19 +26,26 @@ export class Watcher {
     return value
   }
   addDep(dep) {
-    dep.addSub(this)
+    const id = dep.id;
+    if(!this.depIds.has(id)) {
+      this.depIds.add(id)
+      this.deps.push(dep)
+      dep.addSub(this)
+    }
   }
   updata() {
     this.run();
   }
   run() {
-    console.log('【updata value】', this.value)
-    
-    // const value = this.get();
-    // if (value !== this.value) {
-    //   console.log('a')
-    //   const oldValue = this.value
-    //   this.cb.call(vm, value, oldValue)
-    // }
+    const vm = this
+    const value = this.get();
+
+    console.log(this.value)
+    console.log(value)
+
+    if (value !== this.value) {
+      const oldValue = this.value
+      this.cb.call(vm, value, oldValue)
+    }
   }
 }
