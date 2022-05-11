@@ -1,4 +1,5 @@
 import { parsePath } from "../utils";
+import { popTarget, pushTarget } from "./dep";
 import { traverse } from "./traverse"
 
 export class Watcher {
@@ -20,13 +21,15 @@ export class Watcher {
     this.value = this.lazy ? void 0 : this.get();
   }
   get() {
-    window.target = this;
+    // window.target = this;
+    pushTarget(this)
     const vm = this.vm
     let value = this.getter.call(vm, vm)
     if (this.deep) {
       traverse(value)
     }
-    window.target = undefined;
+    // window.target = undefined;
+    popTarget()
     return value
   }
   evalute() {
@@ -60,6 +63,12 @@ export class Watcher {
     if (value !== this.value) {
       const oldValue = this.value
       this.cb.call(vm, value, oldValue)
+    }
+  }
+  depend() {
+    let i = this.deps.length;
+    while (i --) {
+      this.deps[i].depend() // 收集渲染watcher
     }
   }
 }

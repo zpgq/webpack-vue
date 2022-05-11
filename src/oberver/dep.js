@@ -25,3 +25,15 @@ export class Dep {
     }
   }
 }
+
+let stack = []; // 为了收集渲染watcher, 计算属性时需要使用
+export function pushTarget(watcher) {
+  stack.push(watcher)
+  Dep.target = watcher;
+}
+
+export function popTarget() {
+  stack.pop()
+  Dep.target = stack[stack.length - 1]
+  // Dep.target = null;
+}

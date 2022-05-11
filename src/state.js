@@ -49,7 +49,7 @@ function createComputedGetter(key) {
         watcher.evalute()
       }
       if (Dep.target) {
-        watcher.depend()
+        watcher.depend() // 收集渲染watcher
       }
       return watcher.value
     }
