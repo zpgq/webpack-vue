@@ -56,16 +56,25 @@ function createComputedGetter(key) {
   }
 }
 function defineComputed(vm, key, userDef) {
-  Object.defineProperty(vm, key, {
-    get: createComputedGetter(key)
-  })
+  const sharedPropertyDefinetion = {
+    get: () => {},
+    set: () => {}
+  }
+
+  if (typeof userDef === 'function') {
+    sharedPropertyDefinetion.get = createComputedGetter(key);
+  } else {
+    sharedPropertyDefinetion.get = createComputedGetter(key);
+    sharedPropertyDefinetion.set = userDef.set
+  }
+  Object.defineProperty(vm, key, sharedPropertyDefinetion)
 }
 function initComputed(vm, computed) {
   const watchers = vm._computedWatchers = Object.create(null);
   for (const key in computed) {
     const userDef = computed[key];
     const getter = typeof userDef === 'function'? userDef: userDef.get;
-    watchers[key] = new Watcher(vm. getter, () => {}, {lazy: true})
+    watchers[key] = new Watcher(vm, getter, () => {}, {lazy: true})
     defineComputed(vm, key, userDef)
   }
 }

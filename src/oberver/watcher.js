@@ -8,18 +8,16 @@ export class Watcher {
     console.log('options', options)
     if (options) {
       this.deep = !!options.deep
-
       this.lazy = options.lazy
       this.dirty = this.lazy
-      console.log('options.dirty', options.lazy)
     }
-  
 
     this.deps = [];
     this.depIds = new Set();
 
     this.getter = typeof expOrFn === 'function' ? expOrFn: parsePath(expOrFn)
-    this.value = this.get();
+    // 计算熟悉默认不取值收集依赖
+    this.value = this.lazy ? void 0 : this.get();
   }
   get() {
     window.target = this;
@@ -30,6 +28,10 @@ export class Watcher {
     }
     window.target = undefined;
     return value
+  }
+  evalute() {
+    this.value = this.get()
+    this.dirty = false; // 取值后设为false防止值无变化下次在计算
   }
   addDep(dep) {
     const id = dep.id;
@@ -46,7 +48,11 @@ export class Watcher {
     }
   }
   updata() {
-    this.run();
+    if (this.lazy) {
+      this.dirty = true; // 页面重新渲染就可以获取最新的值
+    } else {
+      this.run();
+    }
   }
   run() {
     const vm = this

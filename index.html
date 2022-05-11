@@ -19,17 +19,20 @@
         el: '#app',
         data() {
           return {
-            name: 1
+            firstNmae: 'zhu',
+            lastName: 'pugang'
           }
         },
         computed: {
-          age() {
-            return 'aaa'
+          fullName() {
+            console.log('计算熟悉方法执行了!!')
+            return this.firstNmae + this.lastName;
           }
         }
       })
-      console.log(vm.age)
-
+      vm.firstNmae = 'aa1'
+      console.log(vm.fullName)
+      console.log(vm.fullName)
 
     })
 
