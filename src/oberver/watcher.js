@@ -5,9 +5,15 @@ export class Watcher {
   constructor(vm, expOrFn, cb, options = "") {
     this.vm = vm;
     this.cb = cb;
+    console.log('options', options)
     if (options) {
       this.deep = !!options.deep
+
+      this.lazy = options.lazy
+      this.dirty = this.lazy
+      console.log('options.dirty', options.lazy)
     }
+  
 
     this.deps = [];
     this.depIds = new Set();
@@ -33,13 +39,18 @@ export class Watcher {
       dep.addSub(this)
     }
   }
+  teardown() {
+    let i = this.deps.length;
+    while (i--) {
+      this.deps[i].removeSub(this)
+    }
+  }
   updata() {
     this.run();
   }
   run() {
     const vm = this
     const value = this.get();
-
     if (value !== this.value) {
       const oldValue = this.value
       this.cb.call(vm, value, oldValue)

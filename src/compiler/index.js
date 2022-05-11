@@ -8,9 +8,7 @@ export function compileToFunctions(template) {
   let ast = parseHTML(template)
 
   // 2. 通过ast语法树 生成代码
-  
-  // 通过ast, 重新生成代码
   let code = generate(ast);
-  console.log('code', code)
+  // console.log('code =>', code)
 
 }

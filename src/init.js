@@ -31,6 +31,6 @@ export function initMixin(Vue) {
       const rander = compileToFunctions(template); // 将模板编译成rander函数
       options.rander = rander
     }
-    console.log(options.rander) // 最终都是使用的rander来渲染
+    // console.log(options.rander) // 最终都是使用的rander来渲染
   }
 }

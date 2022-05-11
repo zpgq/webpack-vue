@@ -1,6 +1,5 @@
 function genProps(attrs) {
     let str = '';
-    console.log('attrs', attrs)
     attrs.forEach(attr => {
         if (attr.name === 'style') {
             let obj = {}
@@ -16,7 +15,6 @@ function genProps(attrs) {
 }
 
 function gen(node) {
-    console.log(node, 'node')
     if (node.type === 1) {
         return generate(node); // 生成元素节点的字符串
     } else {
@@ -28,7 +26,7 @@ function gen(node) {
 function genChildren(el) {
     const children = el.children;
     if (children) {
-        return children.map(child => gen(child).join(','))
+        return children.map(child => gen(child))
     }
 }
 
