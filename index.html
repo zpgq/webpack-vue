@@ -20,7 +20,8 @@
         data() {
           return {
             firstNmae: 'zhu',
-            lastName: 'pugang'
+            lastName: 'pugang',
+            arr: [1, 2, 3]
           }
         },
         computed: {
@@ -30,9 +31,18 @@
           }
         }
       })
-      vm.firstNmae = 'aa1'
-      console.log(vm.fullName)
-      console.log(vm.fullName)
+
+      vm.$watch('arr', () => { })
+
+      // setTimeout(() => {
+      //   vm.arr.push(1)
+      //   vm.arr.push(1)
+      // })
+      vm.arr.push(1)
+      vm.arr.push(10)
+
+      console.log(vm.arr)
+
 
     })
 

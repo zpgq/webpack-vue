@@ -1,7 +1,7 @@
 let uid = 0;
 export class Dep {
   constructor() {
-    this.id = uid++;
+    this.id = uid++; // 相同状态创建依赖去重
     this.subs = [];
   }
   addSub(sub) {
@@ -16,7 +16,6 @@ export class Dep {
     this.subs.forEach(sub => {
       sub.updata()
     })
-    console.log('this.subs', this.subs)
   }
   removeSub(sub) {
     const index = this.subs.indexOf(sub)

@@ -1,12 +1,14 @@
-import { parsePath } from "../utils";
+import { nextTick, parsePath } from "../utils";
 import { popTarget, pushTarget } from "./dep";
 import { traverse } from "./traverse"
 
+let uid = 0;
 export class Watcher {
   constructor(vm, expOrFn, cb, options = "") {
+    this.id = uid ++; // 批量更新相同watcher去重
     this.vm = vm;
     this.cb = cb;
-    console.log('options', options)
+
     if (options) {
       this.deep = !!options.deep
       this.lazy = options.lazy
@@ -54,10 +56,12 @@ export class Watcher {
     if (this.lazy) {
       this.dirty = true; // 页面重新渲染就可以获取最新的值
     } else {
-      this.run();
+      queueWatcher(this); // 暂存, 批量处理watcher
+      // this.run();
     }
   }
   run() {
+    console.log('run')
     const vm = this
     const value = this.get();
     if (value !== this.value) {
@@ -70,5 +74,30 @@ export class Watcher {
     while (i --) {
       this.deps[i].depend() // 收集渲染watcher
     }
+  }
+}
+
+let queue = []; // 将需要批量更新的watcher存到队列中, 稍后执行
+let has = {}; // watcher去重
+let padding = false;
+
+function flushSchedulerQueue() {
+  queue.forEach(watcher => watcher.run())
+  queue = [];
+  has = {};
+  padding = false;
+}
+
+function queueWatcher(watcher) {
+  const id = watcher.id
+  if (has[id] == null) {
+    queue.push(watcher)
+    has[id] = true;
+  }
+
+  // 异步执行, 相同的watcher值执行一次
+  if (!padding) {
+    nextTick(flushSchedulerQueue) // 异步更新
+    padding = true
   }
 }

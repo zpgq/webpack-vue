@@ -18,8 +18,8 @@ export const arrayMethods = Object.create(arrayProto);
           insert = args
       }
       if(insert) ob.observeArray(insert);
-
-      ob.dep.notify()
+      
+      ob.dep.notify();
       return result
     })
   });
