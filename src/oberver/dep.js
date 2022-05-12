@@ -8,8 +8,8 @@ export class Dep {
     this.subs.push(sub)
   }
   depend() {
-    if (window.target) {
-      window.target.addDep(this)
+    if (Dep.target) {
+      Dep.target.addDep(this)
     }
   }
   notify() {
