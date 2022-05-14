@@ -10,7 +10,9 @@
 
 <body>
   <div id="app" style="color: red;font-size: 10px">
-    <div id="my" style="color: red">hello {{ name }}</div>
+    <div>hello {{ name }} 11{{age}}111
+      <p>hhh</p>
+    </div>
   </div>
   <script>
     window.addEventListener('DOMContentLoaded', function () {
@@ -32,17 +34,8 @@
         }
       })
 
-      vm.$watch('arr', () => { })
-
-      // setTimeout(() => {
-      //   vm.arr.push(1)
-      //   vm.arr.push(1)
-      // })
-      vm.arr.push(1)
-      vm.arr.push(10)
-
-      console.log(vm.arr)
-
+      let arr = [1, 2, 3]
+      console.log(arr.slice(3,2))
 
     })
 

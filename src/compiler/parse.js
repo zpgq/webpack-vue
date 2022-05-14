@@ -28,8 +28,12 @@ export function parseHTML(html) {
     stack.push(elemnt)
   }
   function end(tagName) {
-    // 在结束标签处, 添加父子结构关系
     let elemnt = stack.pop();
+    // <div> <p></p> hello </div> 
+    // ==> stack[div, p] 查找为结束标签p把p弹出栈 => stack[div]
+    // 弹出栈后需要把currentParent指向div, 以便后面的hello放到div内
+
+    // 在结束标签处, 添加父子结构关系
     currentParent = stack[stack.length - 1]
     if (currentParent) {
       elemnt.parent = currentParent;
