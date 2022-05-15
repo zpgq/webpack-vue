@@ -27,22 +27,26 @@ function gen(node) {
         let text = node.text;
         //  defaultTagRE ==> 全局匹配{{}}
         if (!defaultTagRE.test(text)) {
-            return `_v{${JSON.stringify(text)}}`
+            return `_v(${JSON.stringify(text)})`
         }
 
         let tokens = []; // 存放每一段代码
         let lastIndex = defaultTagRE.lastIndex = 0; // 正则全局模式需要每次重置lastIndex
         let match, index;
+        // 匹配出带有{{}}
         while(match = defaultTagRE.exec(text)) {
             index = match.index; // 保存匹配到的索引
+            // lastIndex 匹配到索引的结束索引
             if (index > lastIndex) {
-                console.log('text.slice(lastIndex, index)', text.slice(lastIndex, index))
+                // 文本
                 tokens.push(JSON.stringify(text.slice(lastIndex, index)))
             }
+            // {{}}及里面的内容
             tokens.push(`_s(${match[1].trim()})`)
-            lastIndex = index = match[0].length;
+            // 下一次匹配从{{}}后开始匹配
+            lastIndex = index + match[0].length;
         }
-        console.log('tokens =>', tokens)
+        // {{}}后的文本
         if (lastIndex < text.length) {
             tokens.push(JSON.stringify(text.slice(lastIndex)))
         }
@@ -59,10 +63,10 @@ function genChildren(el) {
 
 export function generate(el) {
     let children = genChildren(el)
-    let code = `_c('${el.tag}', 
-        ${el.attrs.length 
+    let code = `_c('${el.tag}',
+        ${el.attrs.length
             ? `${genProps(el.attrs)}`
-            : 'undefined'},
-        ${children? children: ''})`;
+            : 'undefined'}
+        ${children? `,${children}`: ''})`;
     return code;
 }

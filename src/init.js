@@ -1,4 +1,5 @@
 import { compileToFunctions } from "./compiler";
+import { mountComponent } from "./lifecycle";
 import { initState } from "./state";
 
 
@@ -10,8 +11,7 @@ export function initMixin(Vue) {
     // 初始化数据, 初始化props、methods、data、computed、watch等等
     initState(vm);
 
-
-    if(vm.$options.el) {
+    if(vm.$options.el) { // 挂载的逻辑
       vm.$mount(vm.$options.el)
     }
   }
@@ -21,6 +21,7 @@ export function initMixin(Vue) {
     const options = vm.$options;
 
     el = document.querySelector(el);
+    vm.$el = el;
 
     // 生成元素的查找逻辑 rander -> template -> el选中的html元素
     if (!options.rander) {
@@ -31,6 +32,9 @@ export function initMixin(Vue) {
       const rander = compileToFunctions(template); // 将模板编译成rander函数
       options.rander = rander
     }
-    // console.log(options.rander) // 最终都是使用的rander来渲染
+    // console.log('render=>', options.rander) // 最终都是使用的rander来渲染
+
+    // 挂在组件
+    mountComponent(vm, el)
   }
 }
