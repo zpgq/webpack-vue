@@ -1,5 +1,5 @@
 import { observe } from ".";
-import { def } from "../utils";
+import { def } from "../util";
 
 const arrayProto = Array.prototype;
 export const arrayMethods = Object.create(arrayProto);

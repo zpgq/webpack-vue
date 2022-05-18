@@ -17,6 +17,17 @@
   <script>
     window.addEventListener('DOMContentLoaded', function () {
 
+      Vue.mixin({
+        data() {
+          return { 
+            age: 1
+          }
+        },
+        created() {
+          console.log('mixin', this.age)
+        }
+      })
+
       const vm = new Vue({
         el: '#app',
         data() {
@@ -31,10 +42,12 @@
             console.log('计算熟悉方法执行了!!')
             return this.firstNmae + this.lastName;
           }
-        }
+        },
+        created() {
+          console.log('vm', this.firstNmae)
+        },
       })
 
-      
     })
 
   </script>

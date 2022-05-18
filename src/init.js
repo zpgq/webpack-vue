@@ -1,17 +1,28 @@
 import { compileToFunctions } from "./compiler";
-import { mountComponent } from "./lifecycle";
+import { initEvents } from "./events";
+import { mountComponent, callHook } from "./lifecycle";
 import { initState } from "./state";
+import { mergeOptions } from "./util";
 
 
 export function initMixin(Vue) {
   Vue.prototype._init = function (options) {
     const vm = this;
-    vm.$options = options || {};
 
+    vm.$options = mergeOptions(
+      vm.constructor.options,
+      options || {},
+    );
+    console.log('vm.$options', vm.$options)
+    
+    initEvents(vm)
+    callHook(vm, 'beforeCreate')
     // 初始化数据, 初始化props、methods、data、computed、watch等等
     initState(vm);
+    callHook(vm, 'created')
 
-    if(vm.$options.el) { // 挂载的逻辑
+    // 解析模板渲染
+    if(vm.$options.el) {
       vm.$mount(vm.$options.el)
     }
   }

@@ -1,6 +1,6 @@
 import { Dep } from "./dep"
 import { arrayMethods } from './array'
-import { def, hasOwn } from "../utils";
+import { def, hasOwn } from "../util";
 
 export function observe(value) {
   if (typeof value !== 'object') {

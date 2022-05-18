@@ -4,6 +4,8 @@ export function patch(oldVnode, vnode) {
     let parentEle = oldVnode.parentNode;
     parentEle.insertBefore(el, oldVnode.nextSibling); // 新节点插入到#app下一个兄弟元素
     parentEle.removeChild(oldVnode); // 删除老节点
+    
+    return el;
 }
 
 function createEle(vnode) {

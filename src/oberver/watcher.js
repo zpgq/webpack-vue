@@ -1,4 +1,4 @@
-import { nextTick, parsePath } from "../utils";
+import { nextTick, parsePath } from "../util";
 import { popTarget, pushTarget } from "./dep";
 import { traverse } from "./traverse"
 
