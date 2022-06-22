@@ -13,7 +13,7 @@ export function initMixin(Vue) {
       vm.constructor.options,
       options || {},
     );
-    console.log('vm.$options', vm.$options)
+    // console.log('vm.$options', vm.$options)
     
     initEvents(vm)
     callHook(vm, 'beforeCreate')

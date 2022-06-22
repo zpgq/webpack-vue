@@ -61,7 +61,6 @@ export class Watcher {
     }
   }
   run() {
-    console.log('run')
     const vm = this
     const value = this.get();
     if (value !== this.value) {

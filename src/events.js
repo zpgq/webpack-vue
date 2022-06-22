@@ -6,7 +6,7 @@ export function initEvents(vm) {
 
 export function eventsMixin(Vue) {
   Vue.prototype.$on = function (event, fn) {
-    console.log('$on', event)
+    // console.log('$on', event)
     const vm = this;
     if (Array.isArray(event)) {
       for (let i = 0; i < event.length; i ++) {

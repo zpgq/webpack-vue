@@ -22,7 +22,7 @@ export function compileToFunctions(template) {
       return 
     }
   */
- console.log('code', code)
+//  console.log('code', code)
   // 3. 将字符串转化成函数
   // 通过with 限制取值范围为this, 稍后通过改变this就能取到值了
   let render = new Function(`with(this){return ${code}}`)

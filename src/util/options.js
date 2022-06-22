@@ -51,8 +51,5 @@ export function mergeOptions(parent, child) { // 将子选项和父选项合并
       mergeFied(key)
     }
   }
-
-  console.log('opts', options.data())
-
   return options
 }

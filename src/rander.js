@@ -8,6 +8,7 @@ export function randerMixin(Vue) {
       const vm = this;
       const rander = vm.$options.rander
       let vnode = rander.call(vm)
+      console.log('vnode', vnode)
       return vnode
   }
 }
