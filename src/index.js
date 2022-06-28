@@ -2,7 +2,7 @@ import { initMixin } from './init'
 import { lifecycleMixin } from './lifecycle';
 import { stateMixin } from './state.js'
 import { eventsMixin } from './events'
-import { randerMixin } from './rander.js';
+import { renderMixin } from './render.js';
 import { initGlobalApi } from './global-api';
 
 
@@ -16,7 +16,7 @@ initMixin(Vue);
 stateMixin(Vue);
 eventsMixin(Vue)
 lifecycleMixin(Vue)
-randerMixin(Vue);
+renderMixin(Vue);
 
 window.Vue = Vue;
 export default Vue;

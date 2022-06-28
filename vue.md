@@ -1,4 +1,21 @@
 ## vue仿造vue从0实现
+## 实现过程简要说明
+双向绑定原理
+1. 简单来说就是重写get、set, 读的时候收集依赖(watcher)、改的时候通知更新(dep保存的所有watcher)
+2. watcher观察者, 实例化watcher除了计算属性都会自动get, 执行get会将自身赋值给dep的target, 即此时能够被dep收集
+3. watcher执行get的时候会去解析第二参数expOrFn, 即会被observe的get劫持到, 把当前观察的属性收集进dep
+4. 当修改属性的时候同样会先执行计算属性的get, 且把旧的值赋值给一个新的遍历, 即可以拿到新旧状态, 同时会被observe的set劫持到, 即通知所有收集的watcher更新
+5. 需要注意的是vue2使用defineProperty劫持时, 改变数组无法触发set, 源码使用的是拦截数组原型上的方法手动更新
+
+
+Vue的渲染过程
+1. 初始化混入, 所有状态混入到$options, 初始化props、methods、data、computed、watch
+2. 挂载元素render —> template
+3. 解析template成有父子结构的ast语法树, 在根据这个语法树生成render函数, 根据render函数生成虚拟dom, 即_render
+4. 将_render函数执行生成的虚拟dom传递到_updata中进行新旧虚拟dom对比, 将对比好的newVnode渲染到页面
+5. 状态更新的时候执行_updata(_render())更新页面
+
+
 ### vue响应式原理
 1. 观察者
 ```
@@ -238,7 +255,7 @@ import { initMixin } from './init'
 import { lifecycleMixin } from './lifecycle';
 import { stateMixin } from './state.js'
 import { eventsMixin } from './events'
-import { randerMixin } from './rander.js';
+import { renderMixin } from './render.js';
 import { initGlobalApi } from './global-api';
 
 
@@ -252,7 +269,7 @@ initMixin(Vue);
 stateMixin(Vue);
 eventsMixin(Vue)
 lifecycleMixin(Vue)
-randerMixin(Vue);
+renderMixin(Vue);
 
 window.Vue = Vue;
 export default Vue;
@@ -420,16 +437,16 @@ export function eventsMixin(Vue) {
     el = document.querySelector(el);
     vm.$el = el;
 
-    // 生成元素的查找逻辑 rander -> template
-    if (!options.rander) {
+    // 生成元素的查找逻辑 render -> template
+    if (!options.render) {
       let template = options.template;
       if(!template && el) {
         template = el.outerHTML // outerHTML最外层div也带上
       }
-      const rander = compileToFunctions(template); // 将模板编译成rander函数
-      options.rander = rander
+      const render = compileToFunctions(template); // 将模板编译成render函数
+      options.render = render
     }
-    // console.log('render=>', options.rander) // 最终都是使用的rander来渲染
+    // console.log('render=>', options.render) // 最终都是使用的render来渲染
 
     // 挂在组件
     mountComponent(vm, el)
@@ -437,10 +454,10 @@ export function eventsMixin(Vue) {
 
   export function mountComponent(vm, el) {
     vm.$el = el;
-    // 调用rander方法渲染el熟悉
-    // 1. 调用rander函数创建虚拟节点
+    // 调用render方法渲染el熟悉
+    // 1. 调用render函数创建虚拟节点
     // 2. 将虚拟节点渲染到页面
-    vm._updata(vm._rander())
+    vm._updata(vm._render())
     }
 ```
 - 解析模版模版生成render、具体如何解析可查看源码、思路
@@ -451,7 +468,7 @@ export function eventsMixin(Vue) {
 
 ```
 export function compileToFunctions(template) {
-  // html模板 ==> rander函数
+  // html模板 ==> render函数
   // 1. html转化成ast语法树
   let ast = parseHTML(template)
   // console.log('ast', ast)
@@ -462,7 +479,7 @@ export function compileToFunctions(template) {
       tag: "div"
       type: 1 
   */
-  // 2. 通过ast树生成rander函数
+  // 2. 通过ast树生成render函数
   let code = generate(ast);
   // console.log('code=>', code)
   /*  
@@ -479,14 +496,14 @@ export function compileToFunctions(template) {
 ```
 - render混入
 ```
-export function randerMixin(Vue) {
+export function renderMixin(Vue) {
   //创建_v, _c等等函数, 返回vnode
   installRenderHelpers(Vue.prototype)
   
-  Vue.prototype._rander = function () {
+  Vue.prototype._render = function () {
       const vm = this;
-      const rander = vm.$options.rander
-      let vnode = rander.call(vm)
+      const render = vm.$options.render
+      let vnode = render.call(vm)
       console.log('vnode', vnode)
       return vnode
   }

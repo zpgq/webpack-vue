@@ -60,6 +60,7 @@ function defineReactive(obj, key, val) {
     set(newVal) {
       if (val === newVal) return
       val = newVal;
+      console.log(dep)
       dep.notify()
     }
   })

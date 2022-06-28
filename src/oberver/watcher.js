@@ -23,6 +23,7 @@ export class Watcher {
     this.value = this.lazy ? void 0 : this.get();
   }
   get() {
+    console.log('get')
     // window.target = this;
     pushTarget(this)
     const vm = this.vm

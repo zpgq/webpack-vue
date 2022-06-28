@@ -34,16 +34,16 @@ export function initMixin(Vue) {
     el = document.querySelector(el);
     vm.$el = el;
 
-    // 生成元素的查找逻辑 rander -> template -> el选中的html元素
-    if (!options.rander) {
+    // 生成元素的查找逻辑 render -> template -> el选中的html元素
+    if (!options.render) {
       let template = options.template;
       if(!template && el) {
         template = el.outerHTML // outerHTML最外层div也带上
       }
-      const rander = compileToFunctions(template); // 将模板编译成rander函数
-      options.rander = rander
+      const render = compileToFunctions(template); // 将模板编译成render函数
+      options.render = render
     }
-    // console.log('render=>', options.rander) // 最终都是使用的rander来渲染
+    // console.log('render=>', options.render) // 最终都是使用的render来渲染
 
     // 挂在组件
     mountComponent(vm, el)
